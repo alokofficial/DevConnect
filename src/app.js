@@ -9,10 +9,10 @@ app.use(express.json());
 app.post("/signup", async (req, res) => {
   const newUser = new User(req.body);
   try {
-    await newUser.save();
-    res.send("User Added Successfully!!");
+    const user = await newUser.save();
+    res.status(201).send(user);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(error.message);
   }
 });
 
@@ -48,17 +48,25 @@ app.delete('/user',async(req,res)=>{
 
 // update a user
 
-app.patch('/user', async(req,res)=>{
+app.patch('/user/:userId', async(req,res)=>{
+  const {userId} = req.params
   const data = req.body
+  const AllowedUpdates = ['firstName','lastName','password','age','gender','photoUrl','about','skills']
+
+  const isUpdateAllowed = Object.keys(data).every((update)=> AllowedUpdates.includes(update))
+
+  if(!isUpdateAllowed){
+    return res.status(400).send("Update is not allowed")
+  }
   try {
-    const user = await User.findByIdAndUpdate(req.body.id,data)
+    const user = await User.findByIdAndUpdate(userId,data,{runValidators:true})
     if(!user){
       throw new Error()
     }else{
       res.send("User Updated Successfully")
     }
   } catch (error) {
-    res.status(404).send("User not found")
+    res.status(404).send(error.message)
   }
 })
 
@@ -70,7 +78,7 @@ app.get("/feed", async (req, res) => {
 
 app.use("/", (err, req, res, next) => {
   if (err) {
-    res.status(500).send("Something went wrong!!");
+    res.status(500).send("Something went wrong!!", err);
   }
 });
 
