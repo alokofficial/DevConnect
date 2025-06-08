@@ -49,8 +49,8 @@ app.post('/login', async(req,res)=>{
     if(!isPasswordMatch){
       throw new Error("Invalid Credentials!")
     }
-    const token = jwt.sign({_id:user._id},"secretKey")
-    res.cookie("token",token)
+    const token = jwt.sign({_id:user._id},"secretKey",{expiresIn:'1d'})
+    res.cookie("token",token,{ expires: new Date(Date.now() + 8 * 3600000)})
     res.send(user)
   } catch (error) {
     res.status(400).send("ERROR: "+error.message)
