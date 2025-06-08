@@ -22,4 +22,14 @@ const validateSignInData = (req)=>{
     throw new Error("Password is not strong enough")
   }
 }
-module.exports = {validateSignUpData, validateSignInData}
+
+const validateProfileData = (req)=>{
+  const allowedEditFields = ["firstName","lastName","about","skills","photoUrl","age"]
+  const isEditAllowed = Object.keys(req.body).every((field)=> allowedEditFields.includes(field))
+
+  if(!isEditAllowed){
+    throw new Error("Edit is not allowed")
+  }
+  return isEditAllowed
+}
+module.exports = {validateSignUpData, validateSignInData,validateProfileData}
