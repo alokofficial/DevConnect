@@ -1,123 +1,20 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./model/userModel");
-const {validateSignUpData, validateSignInData} = require("./utils/validation")
-const cookiePrser = require('cookie-parser')
-const {userAuth} = require('./middlewares/auth')
-
+const cookieParser = require('cookie-parser')
+const authRouter = require('./routes/authRouter')
+const userRouter = require('./routes/userRouter')
+const profileRouter = require('./routes/profileRouter')
+const requestRouter = require('./routes/requestRouter')
 
 const app = express();
 app.use(express.json());
-app.use(cookiePrser())
+app.use(cookieParser())
 
-//Signup a new user
-app.post("/signup", async (req, res) => {
-  try {
-    //validate the entered data
-    validateSignUpData(req)
-    const {firstName, lastName, email, password} = req.body
-  
-    //create a new user
-    const newUser = new User({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
-    // save the user
-    const user = await newUser.save();
-    res.status(201).send(user);
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-});
-
-//login a user
-app.post('/login', async(req,res)=>{
-  try {
-    validateSignInData(req)
-    const {email,password} = req.body
-    const user =  await User.findOne({email})
-    if(!user){
-      throw new Error("Invalid Credentials!")
-    }
-    const isPasswordMatch = await user.validatePassword(password)
-    if(!isPasswordMatch){
-      throw new Error("Invalid Credentials!")
-    }
-    const token = await user.getJWT();
-
-    res.cookie("token",token,{ expires: new Date(Date.now() + 8 * 3600000)})
-    res.send(user)
-  } catch (error) {
-    res.status(400).send("ERROR: "+error.message)
-  }
-})
-
-// user profile
-
-app.get('/profile',userAuth, async(req,res)=>{
-  try {
-    const user = req.user
-    res.send(user)
-  } catch (error) {
-    res.status(400).send(error.message)
-  }
-})
-
-//get a users
-app.post('/user',async(req,res)=>{
-    try {
-      const user = await User.findOne({email:req.body.email}).select("-password")
-      if(!user){
-        throw new Error()
-      }
-      else{
-        res.send(user)
-      }
-    } catch (error) {
-      res.status(404).send("User not found")
-    }
-})
-
-// delete a user
-app.delete('/user',async(req,res)=>{
-  try{
-    // const user = await User.findOneAndDelete({_id:req.body.id})
-    const user = await User.findByIdAndDelete(req.body.id)
-    if(!user){
-      throw new Error()
-    }else{
-      res.send("User Deleted Successfully")
-    }
-  }catch(error){
-      res.status(404).send("User not found")
-  }
-})
-
-// update a user
-
-app.patch('/user/:userId', async(req,res)=>{
-  const {userId} = req.params
-  const data = req.body
-  const AllowedUpdates = ['firstName','lastName','password','age','gender','photoUrl','about','skills']
-
-  const isUpdateAllowed = Object.keys(data).every((update)=> AllowedUpdates.includes(update))
-
-  if(!isUpdateAllowed){
-    return res.status(400).send("Update is not allowed")
-  }
-  try {
-    const user = await User.findByIdAndUpdate(userId,data,{runValidators:true})
-    if(!user){
-      throw new Error()
-    }else{
-      res.send("User Updated Successfully")
-    }
-  } catch (error) {
-    res.status(404).send(error.message)
-  }
-})
+app.use('/',authRouter)
+app.use('/',userRouter)
+app.use('/',profileRouter)
+app.use('/',requestRouter)
 
 // Feed API - GET /feed-- get all users from database
 app.get("/feed", async (req, res) => {
