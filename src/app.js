@@ -3,9 +3,14 @@ const connectDB = require("./config/database");
 const User = require("./model/userModel");
 const {validateSignUpData, validateSignInData} = require("./utils/validation")
 const bcrypt = require("bcrypt")
+const cookiePrser = require('cookie-parser')
+const jwt = require('jsonwebtoken')
+const {userAuth} = require('./middlewares/auth')
+
 
 const app = express();
 app.use(express.json());
+app.use(cookiePrser())
 
 //Signup a new user
 app.post("/signup", async (req, res) => {
@@ -44,9 +49,22 @@ app.post('/login', async(req,res)=>{
     if(!isPasswordMatch){
       throw new Error("Invalid Credentials!")
     }
+    const token = jwt.sign({_id:user._id},"secretKey")
+    res.cookie("token",token)
     res.send(user)
   } catch (error) {
     res.status(400).send("ERROR: "+error.message)
+  }
+})
+
+// user profile
+
+app.get('/profile',userAuth, async(req,res)=>{
+  try {
+    const user = req.user
+    res.send(user)
+  } catch (error) {
+    res.status(400).send(error.message)
   }
 })
 
