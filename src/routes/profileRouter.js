@@ -2,6 +2,7 @@ const express = require('express');
 const profileRouter = express.Router();
 const {userAuth} = require('../middlewares/auth');
 const { validateProfileData } = require('../utils/validation');
+const validator = require('validator')
 
 profileRouter.get('/profile/view',userAuth, async(req,res)=>{
   try {
@@ -29,6 +30,22 @@ profileRouter.patch('/profile/edit',userAuth, async(req,res)=>{
 
 })
 
-
+profileRouter.patch('/profile/password',userAuth,async(req,res)=>{
+  try{
+    const user = req.user
+    const {newPassword,confirmNewPassword} = req.body
+    if(newPassword !== confirmNewPassword){
+      throw new Error("Password not Matched!")
+    }
+    if(!validator.isStrongPassword(newPassword)){
+      throw new Error("Password is not strong enough!")
+    }
+    user.password = newPassword;
+    await user.save()
+    res.send("Password Changed successfully!!")
+  }catch(error){
+    res.status(400).send(error.message)
+  }
+})
 
 module.exports = profileRouter
