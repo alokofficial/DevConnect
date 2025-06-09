@@ -16,11 +16,6 @@ app.use('/',userRouter)
 app.use('/',profileRouter)
 app.use('/',requestRouter)
 
-// Feed API - GET /feed-- get all users from database
-app.get("/feed", async (req, res) => {
-  const user = await User.find();
-  res.send(user);
-});
 
 app.use("/", (err, req, res, next) => {
   if (err) {
