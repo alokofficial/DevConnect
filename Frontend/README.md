@@ -10,3 +10,10 @@
               daisyui,
         ]
         >
+- create NavBar.jsx component
+- install react-router-dom
+- Create BrowserRouter with basename > Routes>Route for body and >RouteChildren
+- create an Outlet in body component.
+
+
+
