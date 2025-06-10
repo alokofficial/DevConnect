@@ -1,0 +1,22 @@
+{
+  "name": "devconnect",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"cd Backend && npm run dev\" \"cd Frontend && npm run dev\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alokofficial/DevConnect.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alokofficial/DevConnect/issues"
+  },
+  "homepage": "https://github.com/alokofficial/DevConnect#readme",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
