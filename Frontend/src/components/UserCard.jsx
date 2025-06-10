@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserCard = ({user}) => {
+const UserCard = ({user,primary,secondary}) => {
   return (
     <div className="card glass w-80 flex justify-center items-center">
       <figure className="px-6 pt-6">
