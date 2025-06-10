@@ -25,6 +25,10 @@
 - Login and see if data is coming properly in store
 - navbar should update as soon as user login
 - folder structure cleaner with constant.js 
+- we are not able to access other route without login
+- if token is not present then it will redirect to login page
+- Reduced the api call again and again by checking the user present in store or not before fetching loggedIn user.
+
 
 
 
