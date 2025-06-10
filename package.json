@@ -2,7 +2,7 @@
   "name": "devconnect",
   "version": "1.0.0",
   "scripts": {
-    "start": "concurrently \"cd Backend && npm run dev\" \"cd Frontend && npm run dev\"",
+    "start": "concurrently \"cd Backend && npm run dev\" \"cd Frontend && npm run dev -- --host\"",
     "build": "cd Frontend && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
