@@ -8,6 +8,7 @@ import { BASE_URL } from "../utils/constants";
 const Login = () => {
   const [emailId, setEmailId] = useState("simran@gmail.com");
   const [password, setPassword] = useState("Simran!123");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,10 +20,10 @@ const Login = () => {
       },{
         withCredentials: true
       });
-    dispatch(addUser(response.data))
+    dispatch(addUser(response?.data))
     navigate("/")
     } catch (error) {
-      console.log(error)
+      setError(`${error?.status} : ${error?.response?.data}`)
     }
   }
 
@@ -35,7 +36,7 @@ const Login = () => {
         />
       </figure>
       <div className="card-body p-4 flex items-center">
-        <div className="flex flex-col gap-8 m-6">
+        <div className="flex flex-col gap-8 m-6 mb-2">
           <label className="input border-none flex items-center gap-2">
             Email:
             <input
@@ -57,7 +58,7 @@ const Login = () => {
             />
           </label>
         </div>
-
+        {error && <p className="text-red-500">{error}</p>}
         <div className="card-actions justify-center">
           <button className="btn btn-primary" onClick={handleLogin}>Login</button>
         </div>
