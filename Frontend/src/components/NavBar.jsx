@@ -18,9 +18,9 @@ const NavBar = () => {
   return (
     <div className="navbar bg-base-300 p-4">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">
+        <Link to="/" className="btn btn-ghost text-xl">
           <span className="text-5xl">👨‍💻</span>DevConnect
-        </a>
+        </Link>
       </div>
       <div className="flex gap-8 px-8">
         <div className="dropdown dropdown-end">
@@ -54,7 +54,10 @@ const NavBar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/">Feed</Link>
+              <Link to="/connections">Connections</Link>
+            </li>
+            <li>
+              <Link to="/requests">Requests</Link>
             </li>
             <li>
               <button onClick={handleLogout}>Logout</button>
