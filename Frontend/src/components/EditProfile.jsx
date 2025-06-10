@@ -9,9 +9,9 @@ import UserCard from "./UserCard";
 const EditProfile = ({ user }) => {
   const [firstName, setFirstName] = useState(user?.firstName);
   const [lastName, setLastName] = useState(user?.lastName);
-  const [about, setAbout] = useState(user?.about);
-  const [age, setAge] = useState(user?.age);
-  const [gender, setGender] = useState(user?.gender);
+  const [about, setAbout] = useState(user?.about || "");
+  const [age, setAge] = useState(user?.age || "");
+  const [gender, setGender] = useState(user?.gender || "");
   const [photoUrl, setPhotoUrl] = useState(user?.photoUrl);
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -39,7 +39,7 @@ const EditProfile = ({ user }) => {
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
-      },2000)
+      }, 2000);
     } catch (error) {
       setError(`${error?.status} : ${error?.response?.data}`);
     }
@@ -165,13 +165,28 @@ const EditProfile = ({ user }) => {
           </div>
         </div>
       </div>
-      <UserCard user={{ firstName, lastName, about, age, gender, photoUrl }} />
-      {showToast &&(<div className="toast toast-top toast-center">
-        <div className="alert alert-success">
-          <span>Profile updated successfully!!</span>
+      <div className="card glass w-80 flex justify-center items-center">
+        <figure className="px-6 pt-6">
+          <img className="rounded-xl" src={photoUrl} alt="car!" />
+        </figure>
+        <div className="card-body">
+          <h2 className="card-title text-3xl">
+            {firstName + " " + lastName}
+          </h2>
+          <div className="flex gap-4 text-xl text-yellow-600">
+            <h1>{age}</h1>
+            <h1>{gender}</h1>
+          </div>
+          <p className="text-wrap">{about.slice(0, 60)}</p>
         </div>
-      </div>)}
-      
+      </div>
+      {showToast && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success">
+            <span>Profile updated successfully!!</span>
+          </div>
+        </div>
+      )}
     </>
   );
 };

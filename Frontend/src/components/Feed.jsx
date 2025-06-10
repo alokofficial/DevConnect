@@ -21,7 +21,10 @@ const Feed = () => {
   }, []);
   
   if(!feed){
-    return <h1>Loading...</h1>
+    return 
+  }
+  if(feed.length === 0){
+    return <h1 className='text-3xl text-center'>No users</h1>
   }
   const user = feed[Math.floor(Math.random() * feed.length)];
   
