@@ -7,6 +7,7 @@ const userRouter = require('./routes/userRouter')
 const profileRouter = require('./routes/profileRouter')
 const requestRouter = require('./routes/requestRouter')
 const cors = require('cors')
+require('dotenv').config()
 
 const app = express();
 app.use(express.json());
@@ -34,7 +35,7 @@ app.use("/", (err, req, res, next) => {
 connectDB()
   .then(() => {
     console.log("connected to database");
-    app.listen(3000, () => {
+    app.listen(process.env.PORT, () => {
       console.log("server is running on port 3000");
     });
   })

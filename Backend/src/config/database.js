@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const {URI} = require("../utils/constants")
 
 const connectDB = async ()=>{
-    await mongoose.connect(URI+"DevConnect")
+    await mongoose.connect(process.env.DB_CONNECTION_SECRET+"DevConnect")
 }
 
 module.exports = connectDB

@@ -8,7 +8,7 @@ const userAuth = async(req,res,next)=>{
     if(!token){
       return res.status(401).send("Please login first!!")
     }
-    const decodedToken = jwt.verify(token,"secretKey")
+    const decodedToken = jwt.verify(token,process.env.JWT_SECRET)
     if(!decodedToken){
       throw new Error("Cookie not valid! Please login again!!")
     }
