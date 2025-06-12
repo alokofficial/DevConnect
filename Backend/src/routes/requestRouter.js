@@ -4,6 +4,7 @@ const requestRouter = express.Router();
 const connectionRequest = require('../model/connectionRequestModel')
 const User = require('../model/userModel');
 const ConnectionRequest = require('../model/connectionRequestModel');
+const sendEmail = require('../utils/sendEmail');
 
 requestRouter.post('/request/send/:status/:toUserId', userAuth ,async(req,res)=>{
   try {
@@ -33,9 +34,16 @@ requestRouter.post('/request/send/:status/:toUserId', userAuth ,async(req,res)=>
       status
     })
     const request = await newRequest.save()
+    // const emailResponse = await sendEmail.run(
+    //   "A new friend request from " + req.user.firstName,
+    //     req.user.firstName + " is " + status + " in " + toUser.firstName + " " + toUser.lastName,
+    // )
+    // console.log(emailResponse)
     res.send(request)
   } catch (error) {
+    console.log(error.message)
     res.status(400).send(error.message)
+
   }
   
 })
