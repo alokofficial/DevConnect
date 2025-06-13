@@ -30,7 +30,9 @@ const Body = () => {
     <div>
       <NavBar />
       <Outlet />
-      <Footer />
+      <div className="mt-20"> 
+        <Footer />
+      </div>
     </div>
   );
 };

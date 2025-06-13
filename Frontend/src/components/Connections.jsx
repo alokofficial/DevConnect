@@ -3,10 +3,11 @@ import { BASE_URL } from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnection } from "../utils/connectionSlice";
-import UserCard from "./UserCard";
+import { Link } from "react-router-dom";
 
 function Connections() {
   const dispatch = useDispatch();
+  
   const connection = useSelector((store) => store.connection);
   const fetchConnections = async () => {
     try {
@@ -27,6 +28,9 @@ function Connections() {
   if (connection.length === 0) {
     return <h1 className="text-3xl text-center">No connections</h1>;
   }
+  const handleClickChat = () => {
+    console.log("clicked");
+  };
   return (
     <div className="flex justify-center flex-col items-center gap-12 m-4">
       <h1 className="text-4xl font-extrabold">Connections</h1>
@@ -45,6 +49,7 @@ function Connections() {
             </div>
             <p className="text-wrap">{user?.about.slice(0, 60)}</p>
           </div>
+          <Link to={`/chat/${user?._id}`} className="btn btn-secondary mb-2" onClick={handleClickChat}>Chat</Link>
         </div>
       ))}
     </div>
